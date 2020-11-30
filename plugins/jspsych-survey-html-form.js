@@ -71,7 +71,7 @@ jsPsych.plugins['survey-html-form'] = (function() {
 
     // add form HTML / input elements
     html += trial.html;
-
+    
     // add submit button
     html += '<input type="submit" id="jspsych-survey-html-form-next" class="jspsych-btn jspsych-survey-html-form" value="'+trial.button_label+'"></input>';
 
@@ -88,6 +88,7 @@ jsPsych.plugins['survey-html-form'] = (function() {
 	      focus_elements[0].focus();
       }
     }
+
 
     display_element.querySelector('#jspsych-survey-html-form').addEventListener('submit', function(event) {
       // don't submit form

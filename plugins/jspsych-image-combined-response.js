@@ -49,14 +49,14 @@ jsPsych.plugins["image-combined-response"] = (function() {
         button1_html: {
           type: jsPsych.plugins.parameterType.STRING,
           pretty_name: 'Button HTML',
-          default: '<input type="radio" id=%choice% name="button1" value="%choice%"> <label for="%choice%">%choice%</label><br>',
+          default: '<input type="radio" id="%choice%" name="button1" value="%choice%"> <label for="%choice%">%choice%</label><br>',//'<button class="jspsych-btn">%choice%</button>',
           array: true,
           description: 'The html of the button. Can create own style.'
         },
         button2_html: {
           type: jsPsych.plugins.parameterType.STRING,
           pretty_name: 'Button HTML',
-          default: '<input type="radio" id=%choice% name="button2" value="%choice%"> <label for="%choice%">%choice%</label><br>',
+          default: '<input type="radio" id="%choice%" name="button2" value="%choice%"> <label for="%choice%">%choice%</label><br>',//'<button class="jspsych-btn1">%choice%</button>',
           array: true,
           description: 'The html of the button. Can create own style.'
         },
@@ -125,13 +125,13 @@ jsPsych.plugins["image-combined-response"] = (function() {
         slider1_width: {
             type: jsPsych.plugins.parameterType.INT,
             pretty_name:'Slider width',
-            default: null,
+            default: 500,
             description: 'Width of the slider in pixels.'
         },
         slider2_width: {
             type: jsPsych.plugins.parameterType.INT,
             pretty_name:'Slider width',
-            default: null,
+            default: 500,
             description: 'Width of the slider in pixels.'
         },
         button_label: {
@@ -365,9 +365,23 @@ jsPsych.plugins["image-combined-response"] = (function() {
       var button2_selected = false;
       var slider_moved = 0;
 
-        
       for (var i = 0; i < trial.button1_choices.length; i++) {
-        display_element.querySelector('#jspsych-image-combined-response-button1-' + i).addEventListener('click', function(e){
+        var radio_el1 = display_element.querySelector('#jspsych-image-combined-response-button1-' + i).firstChild;
+        radio_el1.onclick = function(mouseEvent){
+          //console.log('Radio button clicked');
+          var choice1 = parseInt(mouseEvent.currentTarget.parentElement.getAttribute('data-choice'));
+          if (choice1 !== null && choice1 > -1){
+            //console.log("Button 1 selected");
+            button1_selected = true;
+          }
+          //console.log(slider1_moved && slider2_moved && button1_selected && button2_selected);
+
+          if (slider1_moved && slider2_moved && button1_selected && button2_selected){
+            display_element.querySelector('#jspsych-image-combined-response-next').disabled = false;
+          }
+          after_response(choice1, '1');
+        }
+        /*display_element.querySelector('#jspsych-image-combined-response-button1-' + i).addEventListener('click', function(e){
           var choice1 = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
           if (choice1 !== null && choice1 > -1){
             //console.log("Button 1 selected");
@@ -380,13 +394,15 @@ jsPsych.plugins["image-combined-response"] = (function() {
           }
 
           after_response(choice1, '1');
-        });
+        });*/
       }
       for (var i = 0; i < trial.button2_choices.length; i++) {
-        display_element.querySelector('#jspsych-image-combined-response-button2-' + i).addEventListener('click', function(e){
-          var choice2 = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
+        var radio_el2 = display_element.querySelector('#jspsych-image-combined-response-button2-' + i).firstChild;
+        radio_el2.onclick = function(mouseEvent){
+          //console.log('Radio button clicked');
+          var choice2 = parseInt(mouseEvent.currentTarget.parentElement.getAttribute('data-choice'));
           if (choice2 !== null && choice2 > -1){
-            //console.log("Button 2 selected");
+            //console.log("Button 1 selected");
             button2_selected = true;
           }
           //console.log(slider1_moved && slider2_moved && button1_selected && button2_selected);
@@ -395,7 +411,22 @@ jsPsych.plugins["image-combined-response"] = (function() {
             display_element.querySelector('#jspsych-image-combined-response-next').disabled = false;
           }
           after_response(choice2, '2');
-        });
+        }
+        /*display_element.querySelector('#jspsych-image-combined-response-button2-' + i).addEventListener('click', function(e){
+          var choice2 = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility   
+
+          if (choice2 !== null && choice2 > -1){
+            //console.log("Button 2 selected");
+            //console.log(choice2);
+            button2_selected = true;
+          }
+          //console.log(slider1_moved && slider2_moved && button1_selected && button2_selected);
+
+          if (slider1_moved && slider2_moved && button1_selected && button2_selected){
+            display_element.querySelector('#jspsych-image-combined-response-next').disabled = false;
+          }
+          after_response(choice2, '2');
+        });*/
       }
   
           
